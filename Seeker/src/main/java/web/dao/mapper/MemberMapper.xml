@@ -13,6 +13,7 @@
 
 <select id="selectMemberById" resultType="web.dto.Member" parameterType="String">
 	SELECT 
+	member_no,
 	member_rank
 	, id
 	, name
@@ -165,7 +166,7 @@ DELETE FROM member WHERE id = #{id}
 </select>
 
 <select id="selectMemberNoById" resultType="int" parameterType="web.dto.Member">
-	SELECT memberNo FROM member
+	SELECT member_no FROM member
 	WHERE id = #{id}
 </select>
 

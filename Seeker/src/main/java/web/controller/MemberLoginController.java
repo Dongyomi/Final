@@ -121,6 +121,7 @@ public class MemberLoginController {
 			session.setAttribute("addr1", dbMember.getAddr1());
 			session.setAttribute("addr2", dbMember.getAddr2());
 			session.setAttribute("addr3", dbMember.getAddr3());
+			session.setAttribute("login", true);
 			
 			// loginType : 로그인 상태 식별키 
 			// 0 : 비로그인 상태 (defaultValue = 0)

@@ -892,9 +892,6 @@ function okCall(){
 						<a href='javascript:void(0);' onclick="naverLogout()"><span class="header-menu-text-xs">로그아웃</span></a>	
 					</c:when>	
 				</c:choose>
-			</div>
-			
-			<div id="header-login-box">
 			
 				<c:choose>
 					<c:when test="${loginType eq 1}">
@@ -902,16 +899,9 @@ function okCall(){
 					</c:when>
 				</c:choose>
 		
-			</div>
-			
-			<div id="header-login-box">
 			<c:choose>
 				<c:when test="${empty loginType}">
 					<a href="/member/join"><span class="header-menu-text-xs">회원가입</span></a>
-				</c:when>
-				
-				<c:when test="${socialKey eq null && loginType ne 0 }}">
-					<a href="/member/join"><span class="header-menu-text-xs">소셜회원 회원가입</span></a>
 				</c:when>
 			</c:choose>
 			</div>
@@ -935,7 +925,7 @@ function okCall(){
 			<a href="/board/photoList"><span>사진 게시판</span></a>
 		</div>
 		<div id="hidden-menu-garden">
-			<a href="/"><span>지도</span></a>
+			<a href="/garden/gardenMap"><span>지도</span></a>
 			<a href="/"><span>예약</span></a>
 		</div>
 	</div>
