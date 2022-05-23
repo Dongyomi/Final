@@ -926,7 +926,7 @@ function okCall(){
 		</div>
 		<div id="hidden-menu-garden">
 			<a href="/garden/gardenMap"><span>지도</span></a>
-			<a href="/"><span>예약</span></a>
+			<a href="/garden/reservation"><span>예약</span></a>
 		</div>
 	</div>
 <!-- ----------------------------------여기부터 쪽지-------------------------------------- -->
