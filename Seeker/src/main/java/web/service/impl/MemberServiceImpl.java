@@ -207,5 +207,15 @@ public class MemberServiceImpl implements MemberService{
 	public Member getMemberByPhone(String phone) {
 		return memberDao.selectMemberByPhone(phone);
 	}
-	
+
+	@Override
+	public String getNick(Member member) {
+		return memberDao.selectNickById(member);
+	}
+
+	@Override
+	public int getMemberNo(Member member) {
+		return memberDao.selectMemberNoById(member);
+	}
+
 }

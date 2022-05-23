@@ -99,6 +99,7 @@
 <update id="updateMember" parameterType="web.dto.Member">
 	UPDATE member SET 
 	name = #{name}
+	,pw = #{pw}
 	,nick = #{nick}
 	,email = #{email}
 	,phone = #{phone}
@@ -156,6 +157,16 @@ DELETE FROM member WHERE id = #{id}
 	, addr3
 	FROM member
 	WHERE phone = #{phone}
+</select>
+
+<select id="selectNickById" resultType="String" parameterType="web.dto.Member">
+	SELECT nick FROM member
+	WHERE id = #{id}
+</select>
+
+<select id="selectMemberNoById" resultType="int" parameterType="web.dto.Member">
+	SELECT memberNo FROM member
+	WHERE id = #{id}
 </select>
 
 </mapper>

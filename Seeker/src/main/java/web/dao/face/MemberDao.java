@@ -123,5 +123,13 @@ public interface MemberDao {
 	public String selectIdByPhone(String phone);
 
 	public Member selectMemberByPhone(String phone);
+
+	public String selectNickByMember(Member member);
+
+	public int selectMemberNoByMember(Member member);
+
+	public String selectNickById(Member member);
+
+	public int selectMemberNoById(Member member);
 	
 }

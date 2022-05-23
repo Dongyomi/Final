@@ -31,7 +31,9 @@ public class AdminChatController {
 		
 		for(ChatDto user : list) {
 			member.setId(user.getUserID());
+			//nick = memberService.getNick(member);
 			nick = memberService.getNick(member);
+			
 			member.setNick(nick); 
 			memList.add(member);
 		}

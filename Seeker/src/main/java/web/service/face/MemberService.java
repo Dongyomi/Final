@@ -131,4 +131,8 @@ public interface MemberService {
 
 	public Member getMemberByPhone(String phone);
 
+	public String getNick(Member member);
+
+	public int getMemberNo(Member member);
+
 }

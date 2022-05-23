@@ -99,8 +99,9 @@ public class StompChatController {
       
       web.dto.Member member = new web.dto.Member();
       member.setId(username);
+//    int memberNo = memberService.getMemberNo(member);
       int memberNo = memberService.getMemberNo(member);
-      
+
       List<MyPlant> forAlarmList = wpService.isWaterToday(memberNo);
       Gson gson = new Gson();
       
