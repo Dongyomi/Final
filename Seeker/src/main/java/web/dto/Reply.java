@@ -11,13 +11,20 @@ public class Reply {
 	private String reparent;
 	private String redepth;
 	private String reorder;
+	private String nick;
 	
 	
+	public String getNick() {
+		return nick;
+	}
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 	@Override
 	public String toString() {
 		return "Reply [rum=" + rum + ", replyno=" + replyno + ", boardno=" + boardno + ", id=" + id + ", content="
 				+ content + ", bdate=" + bdate + ", reparent=" + reparent + ", redepth=" + redepth + ", reorder="
-				+ reorder + "]";
+				+ reorder + ", nick=" + nick + "]";
 	}
 	public int getRum() {
 		return rum;

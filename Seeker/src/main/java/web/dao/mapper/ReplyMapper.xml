@@ -15,6 +15,7 @@
 					, id
 					, content
 					, bdate
+					, nick
 				from replytb
 				where boardno = #{boardno}
 				order by bdate
@@ -26,8 +27,8 @@
 
 
 	<insert id="insertReply" parameterType="web.dto.Reply">
-		insert into replytb (replyno , boardno , id , content , bdate)
-		values ( ReplyTB_seq.nextval, #{boardno} , #{id} , #{content} , sysdate )
+		insert into replytb (replyno , boardno , id , content , bdate , nick)
+		values ( ReplyTB_seq.nextval, #{boardno} , #{id} , #{content} , sysdate , #{nick})
 	</insert>
 	
 	<delete id="deleteReply" parameterType="web.dto.Reply">
@@ -39,4 +40,31 @@
 		select count(*) from replytb 
 		where replyno = #{replyno}
 	</select>
+	
+	<insert id="insertPhotoReply" parameterType="web.dto.Reply">
+		insert into replytb (replyno , boardno , id , content , bdate , nick)
+		values ( ReplyTB_seq.nextval, #{boardno} , #{id} , #{content} , sysdate , #{nick})
+	</insert>
+	
+	<select id="selectPhotoReply" parameterType="web.dto.Board" resultType="web.dto.Reply">
+		select * from (
+			select rownum rnum, B.* from (
+				select
+					replyno
+					, boardno
+					, id
+					, content
+					, bdate
+					, nick
+				from replytb
+				where boardno = #{boardno}
+				order by bdate
+			
+			) B
+		) order by rnum
+
+	</select>
+
+
+	
 </mapper>

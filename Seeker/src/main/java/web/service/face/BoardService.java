@@ -247,6 +247,23 @@ public interface BoardService {
 	 */
 	public List<BoardFile> getAttachPhotoFile(Board viewBoard);
 
+	/**
+	 * 포토 리플 리스트 인서트
+	 * @param reply
+	 */
+	public void insertPhotoReply(Reply photoReply);
+	
+	/**
+	 * 
+	 * 포토리플 리스트
+	 * 
+	 * @param viewBoard
+	 * @return
+	 */
+	public List<Reply> getReplyphotoList(Board viewBoard);
+
+	
+
 
 
 

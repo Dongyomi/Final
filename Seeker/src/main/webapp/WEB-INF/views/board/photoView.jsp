@@ -74,7 +74,7 @@ $(document).ready(function() {
 	$("#btnCommInsert").click(function() {
 		
 		$form = $("<form>").attr({
-			action: "/reply/insert",
+			action: "/reply/photoinsert",
 			method: "post"
 		}).append(
 			$("<input>").attr({
@@ -205,9 +205,10 @@ function deleteReply(replyno) {
 <div>
 	<!-- 비로그인상태 -->
 	<c:if test="${not login }">
-	<strong>로그인이 필요합니다</strong><br>
+	<strong>댓글 이용시 로그인이 필요합니다</strong><br>
 	<button onclick='location.href="/member/login";'>로그인</button>
 	<button onclick='location.href="/member/join";'>회원가입</button>
+	<br>
 	</c:if>
 	
 	<!-- 로그인상태 -->
@@ -232,18 +233,17 @@ function deleteReply(replyno) {
 	</tr>
 	</thead>
 	<tbody id="commentBody">
-	<c:forEach items="${replyList }" var="reply">
-	<tr data-replyno="${reply.replyno }">
+	<c:forEach items="${replyphotoList }" var="photoReply">
+	<tr data-replyno="${photoReply.replyno }">
 		
-		<td style="width: 10%;">${viewBoard.nick }</td>
-		<td style="width: 40%;">${reply.content }</td>
+		<td style="width: 10%;">${photoReply.nick  }</td>
+		<td style="width: 40%;">${photoReply.content }</td>
 		<td style="width: 10%;"><fmt:formatDate value="${viewBoard.bdate }" pattern="yyyy-MM-dd "/></td>
-<%-- 		<c:out value="${20*replyList.redepth}"/>	<!-- 대댓글 --> --%>
 		<td style="width: 5%;"><button class="btn btn-default btn-xs">댓글</button></td>
 		<td style="width: 5%;">
-			<c:if test="${sessionScope.id eq reply.id }">
+			<c:if test="${sessionScope.id eq photoReply.id }">
 			<button class="btn btn-default btn-xs"
-				onclick="deleteReply(${reply.replyno });">삭제</button>
+				onclick="deleteReply(${photoReply.replyno });">삭제</button>
 			</c:if>
 		</td> 
 		

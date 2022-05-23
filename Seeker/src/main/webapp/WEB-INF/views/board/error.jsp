@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:import url="/WEB-INF/views/layout/headerm.jsp" />
+<c:import url="/WEB-INF/views/layout/header2.jsp" />
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -26,7 +26,7 @@
 </div>
 <div id="wrap-box">
 	<br><br>
-	<h2 style="color:red;">관리자 로그인이 잘못되었습니다</h2>
+	<h2 style="color:red;">로그인을 해주세요</h2>
 	
 	<span id="time">3</span>초후 로그인 화면으로 이동합니다
 	
@@ -41,5 +41,5 @@
 
 
 
-<c:import url="/WEB-INF/views/layout/footerm.jsp" />
+<c:import url="/WEB-INF/views/layout/footer2.jsp" />
     

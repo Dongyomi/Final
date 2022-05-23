@@ -65,14 +65,14 @@
 			<mapping path="/board/**"/>
 			
 			<!-- 인터셉터에서 제외될 URL -->
-			<exclude-mapping path="/board/freeWrite"/>
-			<exclude-mapping path="/board/freeUpdate"/>
-			<exclude-mapping path="/board/freeDelete"/>
+			<exclude-mapping path="/board/freeView"/>
+			<exclude-mapping path="/board/freeList"/>
+			<exclude-mapping path="/board/error"/>
+			
 	
-			<exclude-mapping path="/board/photoWrite"/>
-			<exclude-mapping path="/board/photoUpdate"/>
-			<exclude-mapping path="/board/photoDelete"/>
-		
+			<exclude-mapping path="/board/photoView"/>
+			<exclude-mapping path="/board/photoList"/>
+
 			
 			<!-- 인터셉터 클래스 지정 -->
 			<beans:bean class="web.interceptor.BoardInterceptor"/>
