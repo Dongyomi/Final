@@ -47,12 +47,6 @@ $(document).ready(function(){
 	var username = "${sessionScope.nick}"
 	var namelength = username.length;
 	console.log(username)
-	
-	var username ="${id}"
-	if('${adminlogin}'== 'true' ) {
-		username = '${adminid}'
-	}
-	
 	var msg = $("#messages");
 	console.log(msg.val())
 	
@@ -144,7 +138,7 @@ $(document).ready(function(){
  					userID: username,
  					chatLog: msg.val()
  					}))
-          $("#messages").val('')
+         $("#messages").val('')
 	 
 	 })
 	 
@@ -231,9 +225,6 @@ $(document).ready(function(){
 					str = "<div>" + list[i] + "</div>"
 				
 					$("#participants").append(str)
-				}
-				if(list == null) {
-					$("#participants").append('')
 				}
 			},
 			error:function(result){

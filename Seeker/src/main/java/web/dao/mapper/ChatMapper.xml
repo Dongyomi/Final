@@ -70,7 +70,7 @@
 	
 	<select id="getPastChatLog" resultType="web.dto.ChatDto" parameterType="web.dto.ChatDto">
 	select * from chatlog
-		where chat_date <![CDATA[<=]]>
+		where chat_date >=
 		   ( select chat_date from (
 		    (select rownum, E.* from
 		        (select chat_date, user_id, chat_log 
@@ -80,7 +80,7 @@
 		        order by chat_date desc) E
 		    where rownum = 1))) 
 		and 
-		    chat_date >=
+		    chat_date <![CDATA[<=]]>
 		    ( select chat_date from (
 		    (select rownum, E.* from
 		        (select chat_date, user_id, chat_log 

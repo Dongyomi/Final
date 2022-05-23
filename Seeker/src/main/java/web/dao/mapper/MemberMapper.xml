@@ -6,69 +6,156 @@
 
 <mapper namespace="web.dao.face.MemberDao">
 
-<select id="selectCntMember" resultType="int" parameterType="web.dto.Member">
+<select id="selectCntMemberByLogin" resultType="int" parameterType="web.dto.Member">
 	SELECT count(*) FROM member
 	WHERE id = #{id} AND pw = #{pw}
 </select>
 
-<select id="selectMemberNoBymember" resultType="int" parameterType="web.dto.Member">
-	SELECT member_no FROM member
+<select id="selectMemberById" resultType="web.dto.Member" parameterType="String">
+	SELECT 
+	member_rank
+	, id
+	, name
+	, nick
+	, email
+	, phone
+	, addr1
+	, addr2
+	, addr3
+	FROM member
 	WHERE id = #{id}
 </select>
 
-<select id="selectMemberRankBymember" resultType="int" parameterType="web.dto.Member">
-	SELECT member_rank FROM member
-	WHERE id = #{id}
+<select id="selectCntSameEamil" resultType="int" parameterType="String">
+	SELECT count(*) FROM member
+	WHERE email = #{email}
 </select>
 
-<select id="selectNameBymember" resultType="string" parameterType="web.dto.Member">
-	SELECT name FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectNickBymember" resultType="string" parameterType="web.dto.Member">
-	SELECT nick FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectEmailBymember" resultType="string" parameterType="web.dto.Member">
-	SELECT email FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectPhoneBymember" resultType="string" parameterType="web.dto.Member">
-	SELECT phone FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectAddr1Bymember" resultType="string" parameterType="web.dto.Member">
-	SELECT addr1 FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectAddr2Bymember" resultType="string" parameterType="web.dto.Member">
-	SELECT addr2 FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectAddr3Bymember" resultType="string" parameterType="web.dto.Member">
-	SELECT addr3 FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectMdateBymember" resultType="date" parameterType="web.dto.Member">
-	SELECT mdate FROM member
-	WHERE id = #{id}
-</select>
-
-<select id="selectCntById" resultType="int" parameterType="web.dto.Member">
+<select id="selectCntMemberById" resultType="int" parameterType="String">
 	SELECT count(*) FROM member
 	WHERE id = #{id}
+</select>
+
+<select id="selectCntMemberByEmail" resultType="int" parameterType="String">
+	SELECT count(*) FROM member
+	WHERE email = #{email}
+</select>
+
+<select id="selectMemberByEmail" resultType="web.dto.Member" parameterType="String">
+	SELECT 
+	member_no 
+	, member_rank
+	, id
+	, name
+	, nick
+	, email
+	, phone
+	, addr1
+	, addr2
+	, addr3
+	FROM member
+	WHERE email = #{email}
+</select>
+
+<select id="selectMemberBySocialEmail" resultType="web.dto.Member" parameterType="String">
+	SELECT 
+	member_no 
+	, member_rank
+	, id
+	, name
+	, nick
+	, email
+	, phone
+	, addr1
+	, addr2
+	, addr3
+	FROM member
+	WHERE email = #{email}
+</select>
+
+<select id="selectMemberByMember" resultType="web.dto.Member" parameterType="web.dto.Member">
+	SELECT 
+	id
+	, phone 
+	FROM member
+	WHERE id = #{id} AND email = #{email}
 </select>
 
 <insert id="insert" parameterType="web.dto.Member">
 	INSERT INTO member( member_no, id, pw, name, nick, email, phone, addr1, addr2, addr3 )
 	VALUES ( member_seq.nextval, #{id}, #{pw}, #{name}, #{nick}, #{email}, #{phone}, #{addr1}, #{addr2}, #{addr3} )
 </insert>
+
+<select id="selectCntMemberByNick" resultType="int" parameterType="String">
+	SELECT count(*) FROM member
+	WHERE nick = #{nick}
+</select>
+
+<update id="updatePwById" parameterType="web.dto.Member">
+	UPDATE member SET pw = #{pw}
+	WHERE id = #{id}
+</update>
+
+<update id="updateMember" parameterType="web.dto.Member">
+	UPDATE member SET 
+	name = #{name}
+	,nick = #{nick}
+	,email = #{email}
+	,phone = #{phone}
+	,addr1 = #{addr1}
+	,addr2 = #{addr2}
+	,addr3 = #{addr3}
+	WHERE id = #{id}
+</update>
+
+<select id="selectCntMemberByEmailAndId" resultType="int" parameterType="web.dto.Member">
+	SELECT count(*) FROM member
+	WHERE id = #{id} AND email = #{email}
+</select>
+
+<delete id="delete" parameterType="String">
+DELETE FROM member WHERE id = #{id}
+</delete>
+
+<select id="selectIdByPw" resultType="String" parameterType="String">
+	SELECT id FROM member
+	WHERE pw = #{pw}
+</select>
+
+<select id="selectPwByid" resultType="String" parameterType="String">
+	SELECT pw FROM member
+	WHERE id = #{id}
+</select>
+
+<select id="selectPhoneByid" resultType="String" parameterType="String">
+	SELECT phone FROM member
+	WHERE id = #{id}
+</select>
+
+<select id="selectCntMemberByPhone" resultType="int" parameterType="String">
+	SELECT count(*) FROM member
+	WHERE phone = #{phone}
+</select>
+
+<select id="selectIdByPhone" resultType="String" parameterType="String">
+	SELECT id FROM member
+	WHERE phone = #{phone}
+</select>
+
+<select id="selectMemberByPhone" resultType="web.dto.Member" parameterType="String">
+	SELECT 
+	member_no 
+	, member_rank
+	, id
+	, name
+	, nick
+	, email
+	, phone
+	, addr1
+	, addr2
+	, addr3
+	FROM member
+	WHERE phone = #{phone}
+</select>
 
 </mapper>

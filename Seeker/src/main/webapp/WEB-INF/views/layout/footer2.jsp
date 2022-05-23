@@ -53,14 +53,13 @@
 
 <script type="text/javascript">
 	
-	const box = document.getElementById('menu-box-board');
 	const board = document.getElementById('menu-board');
 	const $box = document.getElementById('hidden-menu-box');
 	const $board = document.getElementById('hidden-menu-board');
 	const garden = document.getElementById('menu-garden');
 	const $garden = document.getElementById('hidden-menu-garden');
 	
-	box.onmouseover = function() {
+	board.onmouseover = function() {
 			
 		board.style.color = 'black';
 		$board.style.display = "block";

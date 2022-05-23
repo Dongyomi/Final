@@ -39,9 +39,6 @@ public class RoomController {
 	public String getRoom(String roomId, Model model, HttpSession session) {
 		ChatRoomDto room = chatService.findRoomById(roomId);
 		String userid = (String) session.getAttribute("id");
-			if (userid == null) {
-				userid = (String) session.getAttribute("adminid");
-				}
 		logger.info("채팅방 입장시 전달되는 모델값 {}", room);
 		model.addAttribute("room",room);
 		
@@ -110,6 +107,7 @@ public class RoomController {
 	
 	@GetMapping("/chat/getPastChat")
 	public String getPastChat(String roomId, Model model){
+		logger.info("getPastChat {}", roomId);
 		List<ChatDto> pastChat =  chatService.getPastChat(roomId);
 		logger.info("getPastChat {}", pastChat.toString());
 		model.addAttribute("pastChat", pastChat);

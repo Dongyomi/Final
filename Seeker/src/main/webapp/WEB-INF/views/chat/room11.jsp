@@ -44,8 +44,8 @@
 $(document).ready(function(){
 	//웹소켓 설정을 위한 준비 작업 
 	//const username = ${sessionScope.testuser}
-// 	var username ="${testuser}"
-	var username = "${sessionScope.nick}"
+	var username ="${id}"
+	if(username == '') username = '${adminid}'
 	var namelength = username.length;
 	console.log(username)
 	var msg = $("#messages");
@@ -132,14 +132,12 @@ $(document).ready(function(){
 
 	 $("#sendButton").click(function(e){
 		 var msg = $("#messages")
-		 console.log("messages "+msg)
-         stomp.send('/pub/chat/message', {}, 
+         stomp.send('/pub/chat/message11', {}, 
  				JSON.stringify({roomId: roomId, 
  					userID: username,
  					chatLog: msg.val()
  					}))
-         $("#messages").empty();
-	 
+         $("#messages").value = '';
 	 })
 	 
 	  $("#disconn").click(function(){
