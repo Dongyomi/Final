@@ -22,12 +22,6 @@ var nickJ = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/;	// 2 ~ 10자의 영
 //비밀번호 정규식 
 var pwJ = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;	// 숫자, 특수문자 각 1회 이상, 영문 소/대문자 2개 이상 혼용하여 8자리 이상 입력 
 
-//이름 정규식 
-var nameJ = /^[가-힣]{2,4}$/; 	// 2 ~ 4자 이내의 한글만 사용 가능
-
-//이메일 검사 정규식
-var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; 
-
 //휴대폰 번호 정규식 
 var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 
@@ -35,11 +29,7 @@ var duplChkId = 0;
 
 var duplChkNick = 0;
 
-var chkEmailAuth = 0;
-
 var chkPhoneAuth = 0;
-
-var oldEmail;
 
 var oldPhone;
 
@@ -48,7 +38,7 @@ var oldPhone;
 $(document).ready(function() {
 	
 	$("#btnCancel").click(function() {
-		history.go(-1)
+		location.href = '/main'
 	});
 	
  	$("#id").focus();
@@ -72,7 +62,9 @@ $(document).ready(function() {
 			$("#id_check").css("color", "red"); 
 
 		} else{
-			$("#id_check").text(""); 	
+
+			$("#id_check").text("유효한 아이디 입니다."); 
+			$("#id_check").css("color", "green"); 	
 		}
 			
 	});
@@ -139,7 +131,6 @@ $(document).ready(function() {
 		$("#nick_check").text(""); 	
 	});
 	
-	
 	$("#nick").on("input change", function(){
 		
 		if( $("#nick").val() == "" ) {	//nick를 입력하지 않고, 닉네임 입력창 포커싱이 풀릴 경우,
@@ -154,7 +145,8 @@ $(document).ready(function() {
 
 		} else{
 			
-			$("#nick_check").text(""); 	
+			$("#nick_check").text("유효한 닉네임 입니다."); 
+			$("#nick_check").css("color", "green"); 	
 			
 		}
 	});
@@ -219,7 +211,7 @@ $(document).ready(function() {
 
 	$("form").on("submit",function() {		//<form>가 submit 될 경우, 유효성 검사를 진행
 
-		var inval_Arr = new Array(11).fill(0);	
+		var inval_Arr = new Array(8).fill(0);	
 		
 		//아이디 유효성 검사 진행
 		if ( $("#id").val() != "" && idJ.test($("#id").val()) ) { 	//id 유효성 검사를 통과했을 경우,
@@ -279,29 +271,14 @@ $(document).ready(function() {
 
 		} 
 
-		// 이름 유효성 검사 진행
-		if (nameJ.test($("#name").val()) ) { 
+		// 닉네임 유효성 검사 진행
+		if (nickJ.test($("#nick").val()) ) { 
 
 			inval_Arr[3] = 1; 
 
 		} else { 
 		
 			inval_Arr[3] = 0; 
-			
-			alert("이름을 확인해주세요."); 
-			
-			return false; 
-		
-		}
-		
-		// 닉네임 유효성 검사 진행
-		if (nickJ.test($("#nick").val()) ) { 
-
-			inval_Arr[4] = 1; 
-
-		} else { 
-		
-			inval_Arr[4] = 0; 
 			
 			alert("닉네임을 확인해주세요."); 
 			
@@ -312,55 +289,25 @@ $(document).ready(function() {
 		//닉네임 중복 검사 진행
 		if ( duplChkNick === 1 ) { 	//검사 통과시,
 			
-			inval_Arr[5] = 1; 
+			inval_Arr[4] = 1; 
 		
 		} else { 
 			
-			inval_Arr[5] = 0; 
+			inval_Arr[4] = 0; 
 			
 			alert("중복된 닉네임 입니다."); 
 		
 			return false; 
 		}
-		
-		// 이메일 유효성 검사 진행
-		if (mailJ.test($("#email").val()) ) { 
-
-			inval_Arr[6] = 1; 
-		
-		} else { 
-			
-			inval_Arr[6] = 0; 
-
-			alert("이메일을 확인해주세요."); 
-
-			return false; 
-		
-		} 
-		
-		//이메일 인증이 됐는지 확인
-		if(chkEmailAuth === 0) { 	// 0 : 실제 동작, 1 : Test 용도
-			
-			inval_Arr[7] = 0; 
-
-			alert("이메일 인증을 진행해주세요."); 
-			
-			return false; 
-
-		}else {
-			
-			inval_Arr[7] = 1;
-			
-		}
 
 		// 전화번호 유효성 검사 진행
 		if (phoneJ.test($("#phone").val()) ) { 
 
-			inval_Arr[8] = 1; 
+			inval_Arr[5] = 1; 
 
 		} else { 
 
-			inval_Arr[8] = 0; 
+			inval_Arr[5] = 0; 
 
 			alert("휴대폰 번호를 확인해주세요."); 
 
@@ -371,7 +318,7 @@ $(document).ready(function() {
 		//휴대폰 인증이 됐는지 확인
 		if(chkPhoneAuth === 0) {	// 0 : 실제 동작, 1 : Test 용도 
 			
-			inval_Arr[9] = 0; 
+			inval_Arr[6] = 0; 
 
 			alert("휴대폰 인증을 진행해주세요."); 
 		
@@ -379,19 +326,19 @@ $(document).ready(function() {
 
 		}else {
 			
-			inval_Arr[9] = 1;
+			inval_Arr[6] = 1;
 		}
 		
 		//주소가 작성됐는지 확인
 		if( $("#addr1").val() == "") { 
 
-			inval_Arr[10] = 0; 
+			inval_Arr[7] = 0; 
 
 			alert("주소를 확인해주세요."); 
 		
 			return false; 
 
-		}else inval_Arr[10] = 1; 
+		}else inval_Arr[7] = 1; 
 
 		//전체 유효성 검사 
 		var validAll = 1; 
@@ -507,158 +454,7 @@ $(document).ready(function() {
 
 		}
 	}); 
-	
-// 	----------------------------------------------------------------------
-	
-	//이름 유효성 검사 
-	$("#name").focus(function(){
-		$("#name_check").text(""); 	
-	});
-	
-	$("#name").on("input change", function(){
-		
-		if( $("#name").val() == "" ) {	
-			
-			$("#name_check").text("이름을 입력해주세요."); 
-			$("#name_check").css("color", "red");
-	
-		} else if (nameJ.test($(this).val()) ) { 
 
-			$("#name_check").text(""); 
-
-		} else { 
-		
-			$("#name_check").text("2 ~ 4자 이내의 한글을 입력해주세요."); 
-			$("#name_check").css("color", "red"); 
-		} 
-		
-	});
-	
-	$("#name").blur(function() { 
-
-		if( $("#name").val() == "" ) {	
-		
-			$("#name_check").text("이름을 입력해주세요."); 
-			$("#name_check").css("color", "red");
-	
-		} else if (nameJ.test($(this).val()) ) { 
-
-			$("#name_check").text(""); 
-
-		} else { 
-		
-			$("#name_check").text("2 ~ 4자 이내의 한글을 입력해주세요."); 
-			$("#name_check").css("color", "red"); 
-		} 
-
-	}); 
-		
-	// 	----------------------------------------------------------------------
-	
-	//이메일 유효성 검사
-	$("#email").focus(function(){
-		$("#msg_email_check").text("");
-	});
-	
-	$("#email").on("input change", function(){
-		
-		if( $("#email").val() != oldEmail ) {
-			
-			$("#msg_send_mailAuthNum").text("");
-			$("#email_auth").text("");
-		
-			chkEmailAuth = 0;
-			
-			$('#emailAuthNum').val('');
-			$("#btn_send_email").attr("disabled", false);
-		} 
-		
-// 		else if( $("#email").val() == "" ) {	
-
-// 			$("#msg_email_check").text("이메일을 입력해주세요."); 
-// 			$("#msg_email_check").css("color", "red");
-	
-// 		} else if (mailJ.test($(this).val()) ) { 
-
-// 			$("#msg_email_check").text("유효한 이메일 입니다."); 
-// 			$("#email_check").css("color", "green"); 
-
-// 		} else { 
-
-// 			$("#msg_email_check").text("이메일 양식을 확인해주세요."); 
-// 			$("#msg_email_check").css("color", "red"); 
-
-// 		} 
-	});
-
-	$("#email").blur(function() { 
-		
-		console.debug("#email blur 1")
-
-		//Ajax를 사용하여 email에 해당하는 회원이 있는지 확인 
-		$.ajax({ 
-				
-			async : true	//비동기식
-			, type : "POST"
-			, url : "/member/chk_member_by_email" 
-			, data: {
-				email: $("#email").val()
-			}
-			, dataType: "json" 
-			
-			, success : function(resMap) {
-				console.debug("#email blur 2")
-
-				if(resMap.chkEmail) {	//회원 존재O
-					console.debug("#email blur 2-1")
-					
-					$("#msg_email_check").text("해당 email로 이미 가입된 회원이 존재합니다."); 
-					$("#msg_email_check").css("color", "red");
-					$("#btn_send_email").attr("disabled", true);
-					
-				} else if(!resMap.chkEmail){	//회원 존재X
-					
-					console.debug("#email blur 2-2")
-					$("#btn_send_email").attr("disabled", false);
-				
-				}		
-			}//success : function(data) end
-
-			, error: function() {
-				console.debug("#email blur 3")
-				console.log("AJAX 실패 : chk_member_by_email")
-			}
-		});//ajax end
-		console.debug("#email blur 4")
-		
-		if( $("#email").val() == "" ) {	
-			console.debug("#email blur 2-2-1")
-
-			$("#msg_email_check").text("이메일을 입력해주세요."); 
-			$("#msg_email_check").css("color", "red");
-	
-		} else if (mailJ.test($(this).val()) ) { 
-			console.debug("#email blur 2-2-2")
-
-			$("#msg_email_check").text("유효한 이메일 입니다."); 
-			$("#msg_email_check").css("color", "green");
-			
-		} else { 
-			console.debug("#email blur 2-2-3")
-
-			$("#msg_email_check").text("이메일 양식을 확인해주세요."); 
-			$("#msg_email_check").css("color", "red"); 
-
-		} 
-		
-	});	//$("#email").blur(function() { 	
-		
-	$("#emailAuthNum").on("input change", function(){
-		
-		$("#email_auth").text("");
-		
-	});	
-	
 	// 	----------------------------------------------------------------------
 
 	//전화번호 유효성 검사
@@ -766,132 +562,6 @@ $(document).ready(function() {
 	
 // 	---------------------------------------------------------------------------
 
-// 	이메일로 인증 번호 전송
-	$("#btn_send_email").click(function() {
-		console.debug("#btn_send_email click 1")
-		$("#email_auth").text("");
-		$("#msg_send_mailAuthNum").text("");
-		
-		if ( mailJ.test($("#email").val()) ) { 
-			console.debug("#btn_send_email click 2")
-			
-			//Ajax를 사용하여 이메일을 전송 -> 서버에서 인증번호 생성
-			$.ajax({
-				
-				async : true	//비동기식
-				, type: "POST"
-				, url: "/member/send_emailAuthNum"
-				, data: {
-					email: $("#email").val()
-				}
-			
-				, success: function(res) {
-					console.debug("#btn_send_email click 3")
-	
-					if(res){
-						
-						console.debug("#btn_send_email click 3-1")
-						console.log( "Ajax 성공 : send email" )
-						
-						$("#msg_send_mailAuthNum").text("인증번호 전송 성공"); 
-						$("#msg_send_mailAuthNum").css("color", "green"); 
-								
-						oldEmail = $("#email").val();
-						console.debug(oldEmail)
-						
-						$("#btn_auth_email").attr("disabled", false);
-						$('#emailAuthNum').val('');
-						$("#email_auth").text(""); 
-						
-					}else{
-						
-						console.debug("#btn_send_email click 3-2")
-						console.log("Ajax 실패 : send email")
-						
-						$("#msg_send_mailAuthNum").text("인증번호 전송 실패"); 
-						$("#msg_send_mailAuthNum").css("color", "red"); 
-						$("#btn_send_email").attr("disabled", false);
-						
-					}
-					
-				}
-				
-				, error: function() {
-					console.debug("#btn_send_email click 4")
-					console.log("Ajax 실패 : send email")
-				}
-				
-			});
-			console.debug("#btn_send_email click 5")
-	
-		}else{
-			
-			console.debug("#btn_send_email click 6")
-			$("#msg_email_check").text("인증번호 전송 실패"); 
-			$("#msg_email_check").css("color", "red");
-			
-		}
-	});
-	
-// 	---------------------------------------------------------------------------
-
-	// 이메일 인증
-	$("#btn_auth_email").click(function() {
-		console.debug("#btn_auth_email click 1")
-		
-		//Ajax를 사용하여 인증번호를 전송 -> 서버에서 인증번호 검사
-		$.ajax({
-			
-			async : true	//비동기식
-			, type: "POST"
-			, url: "/member/auth_email"
-			, data: {
-				emailAuthNum: $("#emailAuthNum").val()
-			}
-			
-			, success: function( res ) {	
-				console.debug("#btn_auth_email click 2")
-				console.log( "Ajax 성공 : send emailAuthKey" )
-				console.log( res )
-				
-				if (res) { 
-					
-					console.debug("#btn_send_email click 2-1")
-					console.log( "이메일 인증 성공" )
-					
-					$("#email_auth").text("인증 성공"); 
-					$("#email_auth").css("color", "green"); 
-					
-					$("#btn_auth_email").attr("disabled", true);
-					
-					chkEmailAuth = '1';
-					
-				} 
-				
-				else { 
-					
-					console.debug("#btn_auth_email click 2-2")
-					console.log( "이메일 인증 실패" )
-					
-					$("#email_auth").text("인증 실패"); 
-					$("#email_auth").css("color", "red"); 
-									
-				}
-				
-			}
-		
-			, error: function() {
-				console.debug("#btn_auth_email click 3")
-				console.log("Ajax 실패 : send emailAuthKey")
-			}
-			
-		});
-		console.debug("#btn_auth_email click 4")
-
-	});
-	
-// 	---------------------------------------------------------------------------
-	
 	//휴대폰으로 인증번호 전송
 	$("#btn_send_phone").click(function() {
 		console.debug("#btn_send_phone click 1")
@@ -977,8 +647,6 @@ $(document).ready(function() {
 			}
 			
 			, success: function( resMap ) {	
-
-				
 				console.debug("#btn_auth_phone click 2")
 				console.log( "Ajax 성공 : send phoneAuthKey" )
 				
@@ -997,7 +665,7 @@ $(document).ready(function() {
 					console.debug(resMap.email)
 					if(resMap.email != ""){
 			
-						$("#msg_chk_member_by_phone").text("해당 휴대폰 번호로 가입된 이메일 : " + resMap.email); 
+						$("#msg_chk_member_by_phone").text("해당 휴대폰 번호로 가입된 이메일 : resMap.email"); 
 						$("#msg_chk_member_by_phone").css("color", "green"); 
 
 					}
@@ -1108,7 +776,7 @@ function execPostCode() {
 	<div class="page-header"> 
 
 		<div class="col-md-6 col-md-offset-3"> 
-			<h3>일반 회원가입</h3> 
+			<h3>소셜회원 회원가입</h3> 
 		</div> 
 	
 	</div> 
@@ -1136,7 +804,7 @@ function execPostCode() {
 			
 			<div class="form-group"> 
 				<label for="name">이름</label> 
-				<input type="text" class="form-control" id="name" name="name" placeholder="Name..."> 
+				<input type="text" class="form-control" id="name" name="name" value="${name}" readonly="readonly"> 
 				<div class="check_font" id="name_check"></div> 
 			</div>
 			
@@ -1154,26 +822,10 @@ function execPostCode() {
 			
 			<div class="form-group"> 
 				<label for="email">이메일</label> 
-				<input type="email" class="form-control" id="email" name="email" placeholder="E-mail..."> 
+				<input type="email" class="form-control" id="email" name="email" value="${email}" readonly="readonly"> 
 				<div class="check_font" id="msg_email_check"></div> 
 			</div> 
-			
-			<div class="form-group">	
-				<button type="button" class="form-control" id="btn_send_email" style="width: 125px;">인증 번호 전송</button>
-				<div class="check_font" id="msg_send_mailAuthNum"></div> 
-			</div>
-			
-			<div class="form-group"> 
-				<label for="emailAuthNum">이메일 인증 번호 입력</label>
-				<input type="text" id="emailAuthNum" name="emailAuthNum" value="" class="form-control" style="width: 125px;">
-			</div> 
-			
-			<div class="form-group"> 
-				<button type="button" class="btn btn-default" id="btn_auth_email">인증</button> 
-				<div class="check_font" id="email_auth"></div>
-			</div> 
-			
-		
+
 			<div class="form-group"> 
 				<label for="phone">휴대폰 번호('-'없이 번호만 입력해주세요)</label> 
 				<input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone-Number...">
@@ -1221,7 +873,7 @@ function execPostCode() {
 			
 			<div class="form-group text-center"> 
 				<button type="submit" id="btnJoin" name="btnJoin" >회원가입</button>
-				<input type="button" id="btnCancel" name="btnCancel" value="취소" onclick="history.go(-1);" />
+				<input type="button" id="btnCancel" name="btnCancel" value="취소"/>
 			</div> 
 				
 		</form> 
@@ -1230,5 +882,8 @@ function execPostCode() {
 </div><!-- .container end -->
 
 <c:import url="/WEB-INF/views/layout/footer.jsp" />
+
+
+
 
 

@@ -871,18 +871,56 @@ function okCall(){
 			</div>
 		</div>	
 		<div>
+			
 			<div class="header-login-box">
 				<c:choose>
-					<c:when test="${empty login }">
+					<c:when test="${empty loginType}">
 						<a href="/member/login"><span class="header-menu-text-xs">로그인</span></a>
-						<a href="/member/join"><span class="header-menu-text-xs">회원가입</span></a>
 					</c:when>
-					<c:when test="${login eq true }">
-					<a href="/"><span class="header-menu=text-xs">${name}님</span></a>
-					<a href="/member/logout"><span class="header-menu-text-xs">로그아웃</span></a>
+					
+					<c:when test="${loginType eq 1 }">
+						<a href="/member/logout"><span class="header-menu-text-xs">로그아웃</span></a>
 					</c:when>
+			
+					<c:when test="${loginType eq 2 }">
+						<!-- 카카오 로그아웃  -->
+						<a href='javascript:void(0);' onclick="kakaoLogout();"><span class="header-menu-text-xs">로그아웃</span></a>	
+					</c:when>
+					
+					<c:when test="${loginType eq 3 }">
+						<!-- 네이버 로그아웃  -->
+						<a href='javascript:void(0);' onclick="naverLogout()"><span class="header-menu-text-xs">로그아웃</span></a>	
+					</c:when>	
 				</c:choose>
 			</div>
+			
+			<div id="header-login-box">
+			
+				<c:choose>
+					<c:when test="${loginType eq 1}">
+						<a href="/member/changeInfo"><span class="header-menu-text-xs">내정보</span></a>
+					</c:when>
+				</c:choose>
+		
+			</div>
+			
+			<div id="header-login-box">
+			<c:choose>
+				<c:when test="${empty loginType}">
+					<a href="/member/join"><span class="header-menu-text-xs">회원가입</span></a>
+				</c:when>
+				
+				<c:when test="${socialKey eq null && loginType ne 0 }}">
+					<a href="/member/join"><span class="header-menu-text-xs">소셜회원 회원가입</span></a>
+				</c:when>
+			</c:choose>
+			</div>
+			
+			
+			
+			
+			
+			
 			<div class="header-chat-box">
 			<a href="/chat/rooms" >
 			<i class="material-icons dp48">chat_bubble</i>

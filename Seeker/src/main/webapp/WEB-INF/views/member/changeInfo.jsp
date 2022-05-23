@@ -8,13 +8,11 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp" />
 
-<script type="text/javascript">
+<!-- ---------------------------------------------------------------------------- -->
 
+<script type="text/javascript">
 //모든 공백 체크 정규식
 var empJ = /\s/g; 
-
-//아이디 정규식 
-var idJ = /^[a-z][a-z0-9_\-]{4,19}$/;	// 5 ~ 20자의 영문 소문자, 숫자(첫글자는 반드시 영문)만 혼용 가능
 
 //닉네임 정규식 
 var nickJ = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/;	// 2 ~ 10자의 영문 대/소문자, 한글, 숫자만 혼용 가능 
@@ -31,107 +29,28 @@ var mailJ = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a
 //휴대폰 번호 정규식 
 var phoneJ = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/;
 
-var duplChkId = 0;
-
 var duplChkNick = 0;
 
-var chkEmailAuth = 0;
+var chkEmailAuth = 1;
 
-var chkPhoneAuth = 0;
+var chkPhoneAuth = 1;
 
 var oldEmail;
 
 var oldPhone;
 
-// ------------------------------------------------------------------------------------------------------
+var nick = "${ncik}" 
 
+var email = "${email}"
+
+// ------------------------------------------------------------------------------------------------------
 $(document).ready(function() {
 	
-	$("#btnCancel").click(function() {
+	$("#cancel").click(function() {
 		history.go(-1)
-	});
+	})
 	
- 	$("#id").focus();
-	
-//  -------------------------------------------------------------------------
-
-	$("#id").focus(function(){
-		$("#id_check").text(""); 	
-	});
-	
-	$("#id").on("input change", function(){
-		
-		if( $("#id").val() == "" ) {	//id를 입력하지 않고, id 입력창 포커싱이 풀릴 경우,
-
-			$("#id_check").text("아이디를 입력해주세요."); 
-			$("#id_check").css("color", "red");
-			
-		} else if( idJ.test($("#id").val()) == false ) {	//id 유효성 검사를 통과하지 못했을 경우, 
-
-			$("#id_check").text("아이디는 5 ~ 20자의 영문 소문자, 숫자(첫글자는 반드시 영문)만 혼용 가능합니다."); 
-			$("#id_check").css("color", "red"); 
-
-		} else{
-			$("#id_check").text(""); 	
-		}
-			
-	});
-
-	//id 입력창 포커싱이 풀릴 경우,
-	$("#id").blur(function() {
-	
-		if( $("#id").val() == "" ) {	//id를 입력하지 않고, id 입력창 포커싱이 풀릴 경우,
-
-			$("#id_check").text("아이디를 입력해주세요."); 
-			$("#id_check").css("color", "red");
-			
-		} else if( idJ.test($("#id").val()) == false ) {	//id 유효성 검사를 통과하지 못했을 경우, 
-
-			$("#id_check").text("아이디는 5 ~ 20자의 영문 소문자, 숫자(첫글자는 반드시 영문)만 혼용 가능합니다."); 
-			$("#id_check").css("color", "red"); 
-
-		} else {
-		
-			// Ajax를 사용하여 아이디 중복 확인
-			$.ajax({ 
-					
-				async : true	//비동기식
-				, type : "POST"
-				, url : "/member/dupl_id" 
-				, data: {
-					id: $("#id").val()
-				} 
-				, dataType: "json" 
-					
-				, success : function(res) {		//사용 가능한 아이디일 경우, 
-					console.debug("#Id blur 4")
-					
-					if(!res.duplChkId) {
-						console.debug("#Id blur 4-1")
-						
-						$("#id_check").text("사용 가능한 아이디 입니다."); 
-						$("#id_check").css("color", "green"); 
-						duplChkId = 1;
-				
-					} else {
-						console.debug("#Id blur 4-2")
-						
-						$("#id_check").text("중복된 아이디 입니다."); 
-						$("#id_check").css("color", "red"); 
-						duplChkId = 0;
-						
-					}
-						
-				}//success : function(data) end
-	
-				, error: function() {
-					console.debug("#Id blur 5")
-					console.log("AJAX 실패 : duplicate id")
-				}
-			});//ajax end
-			console.debug("#Id blur 6")
-		}
-	});
+	$("#name").focus();
 	
 	// ------------------------------------------------------------------------------------------------------
 	
@@ -139,9 +58,21 @@ $(document).ready(function() {
 		$("#nick_check").text(""); 	
 	});
 	
-	
+	var originNick = $("#nick").val();
+
 	$("#nick").on("input change", function(){
 		
+		console.log($(this).val(), originNick)
+		
+		if( $(this).val() == originNick ) {
+			
+			$("#nick_check").text("사용 가능한 닉네임 입니다. (기존 닉네임)"); 
+			$("#nick_check").css("color", "green"); 
+			duplChkNick = 1;
+			return false;
+		}
+		
+
 		if( $("#nick").val() == "" ) {	//nick를 입력하지 않고, 닉네임 입력창 포커싱이 풀릴 경우,
 			
 			$("#nick_check").text("닉네임를 입력해주세요."); 
@@ -154,13 +85,16 @@ $(document).ready(function() {
 
 		} else{
 			
-			$("#nick_check").text(""); 	
+			$("#nick_check").text("유효한 닉네임 입니다."); 
+			$("#nick_check").css("color", "green"); 	
 			
 		}
 	});
 	
+	
+	
 	//닉네임 입력창 포커싱이 풀릴 경우,
-	$("#nick").blur(function() {	
+	$("#nick").blur(function() {
 		
 		if( $("#nick").val() == "" ) {	//nick를 입력하지 않고, 닉네임 입력창 포커싱이 풀릴 경우,
 			
@@ -216,77 +150,19 @@ $(document).ready(function() {
 	});//$("#nick").blur(function() end
 
 	// ------------------------------------------------------------------------------------------------------
-
+	
 	$("form").on("submit",function() {		//<form>가 submit 될 경우, 유효성 검사를 진행
 
-		var inval_Arr = new Array(11).fill(0);	
+		var inval_Arr = new Array(8).fill(0);	
 		
-		//아이디 유효성 검사 진행
-		if ( $("#id").val() != "" && idJ.test($("#id").val()) ) { 	//id 유효성 검사를 통과했을 경우,
-			
-			inval_Arr[0] = 1; 
-		
-		} else { 
-			
-			inval_Arr[0] = 0; 
-			
-			alert("아이디를 확인해주세요."); 
-		
-			return false; 
-		}
-		
-		//아이디 중복 검사 진행
-		if ( duplChkId === 1 ) { 	//검사 통과시,
-			
-			inval_Arr[1] = 1; 
-		
-		} else { 
-			
-			inval_Arr[1] = 0; 
-			
-			alert("중복된 아이디 입니다."); 
-		
-			return false; 
-		}
-		
-		
-		// 비밀번호 유효성 검사 && 입력된 각각의 비밀번호가 일치하는지 검사 진행 
-		if ( ($("#pw").val() == ($("#check_pw").val() ) ) && pwJ.test($("#pw").val()) ) { 
-
-			inval_Arr[2] = 1; 
-
-		} else if ($("#pw").val() == "") {
-			
-			inval_Arr[2] = 0;
-			
-			console.log("false"); 
-			
-			alert("비밀번호를 확인해주세요."); 
-			
-			$("#pw_check").text("비밀번호를 입력해주세요."); 
-			
-			$("#pw_check").css("color", "red"); 
-			
-			return false;
-			
-		} else { 
-		
-			inval_Arr[2] = 0; 
-
-			alert("비밀번호를 확인해주세요."); 
-
-			return false; 
-
-		} 
-
 		// 이름 유효성 검사 진행
 		if (nameJ.test($("#name").val()) ) { 
 
-			inval_Arr[3] = 1; 
+			inval_Arr[0] = 1; 
 
 		} else { 
 		
-			inval_Arr[3] = 0; 
+			inval_Arr[0] = 0; 
 			
 			alert("이름을 확인해주세요."); 
 			
@@ -297,11 +173,11 @@ $(document).ready(function() {
 		// 닉네임 유효성 검사 진행
 		if (nickJ.test($("#nick").val()) ) { 
 
-			inval_Arr[4] = 1; 
+			inval_Arr[1] = 1; 
 
 		} else { 
 		
-			inval_Arr[4] = 0; 
+			inval_Arr[1] = 0; 
 			
 			alert("닉네임을 확인해주세요."); 
 			
@@ -312,11 +188,11 @@ $(document).ready(function() {
 		//닉네임 중복 검사 진행
 		if ( duplChkNick === 1 ) { 	//검사 통과시,
 			
-			inval_Arr[5] = 1; 
+			inval_Arr[2] = 1; 
 		
 		} else { 
 			
-			inval_Arr[5] = 0; 
+			inval_Arr[2] = 0; 
 			
 			alert("중복된 닉네임 입니다."); 
 		
@@ -326,11 +202,11 @@ $(document).ready(function() {
 		// 이메일 유효성 검사 진행
 		if (mailJ.test($("#email").val()) ) { 
 
-			inval_Arr[6] = 1; 
+			inval_Arr[3] = 1; 
 		
 		} else { 
 			
-			inval_Arr[6] = 0; 
+			inval_Arr[3] = 0; 
 
 			alert("이메일을 확인해주세요."); 
 
@@ -341,7 +217,7 @@ $(document).ready(function() {
 		//이메일 인증이 됐는지 확인
 		if(chkEmailAuth === 0) { 	// 0 : 실제 동작, 1 : Test 용도
 			
-			inval_Arr[7] = 0; 
+			inval_Arr[4] = 0; 
 
 			alert("이메일 인증을 진행해주세요."); 
 			
@@ -349,18 +225,18 @@ $(document).ready(function() {
 
 		}else {
 			
-			inval_Arr[7] = 1;
+			inval_Arr[4] = 1;
 			
 		}
 
 		// 전화번호 유효성 검사 진행
 		if (phoneJ.test($("#phone").val()) ) { 
 
-			inval_Arr[8] = 1; 
+			inval_Arr[5] = 1; 
 
 		} else { 
 
-			inval_Arr[8] = 0; 
+			inval_Arr[5] = 0; 
 
 			alert("휴대폰 번호를 확인해주세요."); 
 
@@ -371,7 +247,7 @@ $(document).ready(function() {
 		//휴대폰 인증이 됐는지 확인
 		if(chkPhoneAuth === 0) {	// 0 : 실제 동작, 1 : Test 용도 
 			
-			inval_Arr[9] = 0; 
+			inval_Arr[6] = 0; 
 
 			alert("휴대폰 인증을 진행해주세요."); 
 		
@@ -379,19 +255,19 @@ $(document).ready(function() {
 
 		}else {
 			
-			inval_Arr[9] = 1;
+			inval_Arr[6] = 1;
 		}
 		
 		//주소가 작성됐는지 확인
 		if( $("#addr1").val() == "") { 
 
-			inval_Arr[10] = 0; 
+			inval_Arr[7] = 0; 
 
 			alert("주소를 확인해주세요."); 
 		
 			return false; 
 
-		}else inval_Arr[10] = 1; 
+		}else inval_Arr[7] = 1; 
 
 		//전체 유효성 검사 
 		var validAll = 1; 
@@ -408,14 +284,13 @@ $(document).ready(function() {
 		
 		if(validAll === 1) { 	//유효성 검사 모두 통과 
 			
-			console.debug("회원가입 성공")
-			alert("회원가입을 환영합니다!"); 
-
+			console.debug("회원정보 수정 완료")
+			alert("회원정보 수정 완료!"); 
 			return true; 
 
 		} else { 
 			
-			console.debug("회원가입 실패")
+			console.debug("회원정보 수정 실패")
 			alert("입력하신 정보를 다시 확인해주세요.") 
 			return false; 
 			
@@ -424,91 +299,6 @@ $(document).ready(function() {
 	});//$("form").on("submit",function() end	
 			
 // ------------------------------------------------------------------------------
-	
-	//<form>이 submit 되기 전에 유효성 검사를 진행
-	
-	//패스워드 유효성 검사
-	$("#pw").focus(function(){
-		$("#pw_check").text(""); 	
-	});
-	
-	$("#pw").on("input change", function(){
-		
-		if ($("#pw").val() == "") {
-
-			$("#pw_check").text("비밀번호를 입력해주세요."); 
-			$("#pw_check").css("color", "red"); 
-			
-		} else if( pwJ.test($("#pw").val()) == false ){
-
-			$("#pw_check").text("숫자, 특수문자 각 1회 이상, 영문 대/소문자 2개 이상 혼용하여 8자리 이상 입력해주세요."); 
-			$("#pw_check").css("color", "red"); 
-		
-		} else {
-
-			$("#pw_check").text("유효한 비밀번호 입니다."); 
-			$("#pw_check").css("color", "green"); 
-			
-		}
-	});	
-		
-	$("#pw").blur(function() { 
-		
-		if (pwJ.test($("#pw").val()) ) { 
-
-			$("#pw_check").text("유효한 비밀번호 입니다."); 
-			$("#pw_check").css("color", "green"); 
-		
-		} else if ($("#pw").val() == "") {
-
-			$("#pw_check").text("비밀번호를 입력해주세요."); 
-			$("#pw_check").css("color", "red"); 
-			
-		} else { 
-
-			$("#pw_check").text("숫자, 특수문자 각 1회 이상, 영문 대/소문자 2개 이상 혼용하여 8자리 이상 입력해주세요."); 
-			$("#pw_check").css("color", "red"); 
-
-		} 
-	}); 
- 
-// 	-------------------------------------------------------------------------
-
-	$("#check_pw").focus(function(){
-		$("#pw_check2").text(""); 			
-	});
-	
-	$("#check_pw").on("input change", function(){
-		
-		if ($("#pw").val() != $(this).val() ) { 
-
-			$("#pw_check2").text("비밀번호가 일치하지 않습니다."); 
-			$("#pw_check2").css("color", "red"); 
-
-		}else { 
-			
-			$("#pw_check2").text("비밀번호가 일치합니다."); 
-			$("#pw_check2").css("color", "green");
-			
-		} 
-	});
-	
-	$("#check_pw").blur(function() { 
-		
-		if ($("#pw").val() != $(this).val() ) { 
-
-			$("#pw_check2").text("비밀번호가 일치하지 않습니다."); 
-			$("#pw_check2").css("color", "red"); 
-
-		}else { 
-			
-			$("#pw_check2").text("비밀번호가 일치합니다."); 
-			$("#pw_check2").css("color", "green"); 
-
-		}
-	}); 
-	
-// 	----------------------------------------------------------------------
 	
 	//이름 유효성 검사 
 	$("#name").focus(function(){
@@ -977,8 +767,6 @@ $(document).ready(function() {
 			}
 			
 			, success: function( resMap ) {	
-
-				
 				console.debug("#btn_auth_phone click 2")
 				console.log( "Ajax 성공 : send phoneAuthKey" )
 				
@@ -997,7 +785,7 @@ $(document).ready(function() {
 					console.debug(resMap.email)
 					if(resMap.email != ""){
 			
-						$("#msg_chk_member_by_phone").text("해당 휴대폰 번호로 가입된 이메일 : " + resMap.email); 
+						$("#msg_chk_member_by_phone").text("해당 휴대폰 번호로 가입된 이메일 : resMap.email"); 
 						$("#msg_chk_member_by_phone").css("color", "green"); 
 
 					}
@@ -1090,7 +878,7 @@ function execPostCode() {
 </script>
 
 <style type="text/css">
-#btnJoin, #btnCancel {
+#btnChange, #btnCancel,#btnDelete {
 	border: 0;
 	border-radius: 5px;
 	background: #FF792A;
@@ -1108,7 +896,7 @@ function execPostCode() {
 	<div class="page-header"> 
 
 		<div class="col-md-6 col-md-offset-3"> 
-			<h3>일반 회원가입</h3> 
+			<h3>회원정보수정</h3> 
 		</div> 
 	
 	</div> 
@@ -1118,31 +906,19 @@ function execPostCode() {
 		
 			<div class="form-group"> 
 				<label for="id">아이디</label> 
-				<input type="text" class="form-control" id="id" name="id" placeholder="ID..."> 
+				<input type="text" class="form-control" id="id" name="id" value="${id}" readonly> 
 				<div class="check_font" id="id_check"></div> 
 			</div> 
 			
 			<div class="form-group"> 
-				<label for="pw">비밀번호</label> 
-				<input type="password" class="form-control" id="pw" name="pw" placeholder="PASSWORD..."> 
-				<div class="check_font" id="pw_check" style="width: 1000px;"></div> 
-			</div> 
-			
-			<div class="form-group"> 
-				<label for="check_pw">비밀번호 확인</label> 
-				<input type="password" class="form-control" id="check_pw" name="check_pw" placeholder="Confirm Password"> 
-				<div class="check_font" id="pw_check2"></div> 
-			</div> 
-			
-			<div class="form-group"> 
 				<label for="name">이름</label> 
-				<input type="text" class="form-control" id="name" name="name" placeholder="Name..."> 
+				<input type="text" class="form-control" id="name" name="name" value="${name}"> 
 				<div class="check_font" id="name_check"></div> 
 			</div>
 			
 			<div class="form-group"> 
 				<label for="nick">닉네임</label> 
-				<input type="text" class="form-control" id="nick" name="nick" placeholder="Nick..."> 
+				<input type="text" class="form-control" id="nick" name="nick" value="${nick}"> 
 				<div class="check_font" id="nick_check"></div> 
 			</div>  
 			
@@ -1154,14 +930,14 @@ function execPostCode() {
 			
 			<div class="form-group"> 
 				<label for="email">이메일</label> 
-				<input type="email" class="form-control" id="email" name="email" placeholder="E-mail..."> 
-				<div class="check_font" id="msg_email_check"></div> 
+				<input type="email" class="form-control" id="email" name="email" value="${email}"> 
 			</div> 
+			<div class="check_font" id="msg_email_check"></div> 
 			
 			<div class="form-group">	
-				<button type="button" class="form-control" id="btn_send_email" style="width: 125px;">인증 번호 전송</button>
-				<div class="check_font" id="msg_send_mailAuthNum"></div> 
+				<button type="button" class="form-control" id="btn_send_email" disabled="disabled" style="width: 125px;">인증 번호 전송</button>
 			</div>
+			<div class="check_font" id="msg_send_mailAuthNum"></div> 
 			
 			<div class="form-group"> 
 				<label for="emailAuthNum">이메일 인증 번호 입력</label>
@@ -1170,20 +946,19 @@ function execPostCode() {
 			
 			<div class="form-group"> 
 				<button type="button" class="btn btn-default" id="btn_auth_email">인증</button> 
-				<div class="check_font" id="email_auth"></div>
 			</div> 
-			
+			<div class="check_font" id="email_auth"></div>
 		
 			<div class="form-group"> 
 				<label for="phone">휴대폰 번호('-'없이 번호만 입력해주세요)</label> 
-				<input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone-Number...">
-				<div class="check_font" id="msg_phone_check"></div>
+				<input type="tel" class="form-control" id="phone" name="phone" value="${phone}">
 			</div> 	
-			 
+			<div class="check_font" id="msg_phone_check"></div> 
+				
 			<div class="form-group">	
-				<button type="button" class="form-control" id="btn_send_phone" style="width: 125px;">인증 번호 전송</button>		
-				<div class="check_font" id="msg_send_PhoneAuthNum"></div>		
+				<button type="button" class="form-control" id="btn_send_phone" style="width: 125px;">인증 번호 전송</button>
 			</div> 
+			<div class="check_font" id="msg_send_PhoneAuthNum"></div>
 			
 			<div class="form-group"> 	
 				<label for="phoneAuthNum">휴대폰 인증 번호 입력</label>
@@ -1192,10 +967,9 @@ function execPostCode() {
 	
 			<div class="form-group"> 	
 				<button type="button" class="btn btn-default" id="btn_auth_phone">인증</button> 
-				<div class="check_font" id="phone_auth"></div>
-				<div class="check_font" id="msg_chk_member_by_phone"></div>
 			</div> 
-			
+			<div class="check_font" id="phone_auth"></div>
+			 
 <!-- 			<div class="form-group">  -->
 <!-- 				<label for="gender">성별 </label>  -->
 <!-- 				<input type="checkbox" id="gender" name="gender" value="남">남  -->
@@ -1207,23 +981,24 @@ function execPostCode() {
 					<label for="addr1">주소</label>
 				</div>
 	
-				<input class="form-control" style="width: 40%; display: inline;" placeholder="우편번호" name="addr1" id="addr1" type="text" readonly="readonly" > 
+				<input class="form-control" style="width: 40%; display: inline;" placeholder="우편번호" name="addr1" id="addr1" type="text" value="${addr1}" readonly="readonly" > 
 				<button type="button" class="btn btn-default" onclick="execPostCode();"><i class="fa fa-search"></i> 우편번호 찾기</button> 
 			</div> 
 					
 			<div class="form-group"> 
-				<input class="form-control" style="top: 5px;" placeholder="도로명 주소" name="addr2" id="addr2" type="text" readonly="readonly" /> 
+				<input class="form-control" style="top: 5px;" placeholder="도로명 주소" name="addr2" id="addr2" type="text" value="${addr2}" readonly="readonly" /> 
 			</div> 
 			
 			<div class="form-group"> 
-				<input class="form-control" placeholder="상세주소" name="addr3" id="addr3" type="text" /> 
+				<input class="form-control" placeholder="상세주소" name="addr3" id="addr3" type="text" value="${addr3}"/> 
 			</div> 
 			
 			<div class="form-group text-center"> 
-				<button type="submit" id="btnJoin" name="btnJoin" >회원가입</button>
+				<button type="submit" id="btnChange" name="btnChange">수정</button> 
 				<input type="button" id="btnCancel" name="btnCancel" value="취소" onclick="history.go(-1);" />
+				<button type="button" id="btnDelete" name="btnDelete">회원탈퇴</button>
 			</div> 
-				
+			
 		</form> 
 	</div>
 
