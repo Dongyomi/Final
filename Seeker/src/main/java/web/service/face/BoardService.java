@@ -166,7 +166,8 @@ public interface BoardService {
 	 * @param board
 	 * @return
 	 */
-	public BoardFile getPhotoAttachFile(Board viewBoard);
+	public List<BoardFile> getPhotoAttachFile(Board viewBoard);
+	
 
 	/**
 	 * 

@@ -328,7 +328,7 @@ public class BoardController {
 		model.addAttribute("updatePhotoBoard" , board);
 		
 		//첨부파일 정보 모델값 전달
-		BoardFile boardFile = boardService.getPhotoAttachFile(board);
+		List<BoardFile> boardFile = boardService.getPhotoAttachFile(board);
 		model.addAttribute("boardFile" , boardFile);
 		
 		

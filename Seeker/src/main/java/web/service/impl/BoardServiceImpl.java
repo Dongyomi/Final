@@ -350,7 +350,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public BoardFile getPhotoAttachFile(Board viewBoard) {
+	public List<BoardFile> getPhotoAttachFile(Board viewBoard) {
 		return boardDao.selectPhotoBoardFileByBoardno(viewBoard);
 	}
 	

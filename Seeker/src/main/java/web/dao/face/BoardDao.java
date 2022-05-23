@@ -149,7 +149,8 @@ public interface BoardDao {
 	 * @param viewBoard
 	 * @return
 	 */
-	public BoardFile selectPhotoBoardFileByBoardno(Board viewBoard);
+	public List<BoardFile> selectPhotoBoardFileByBoardno(Board viewBoard);
+	
 
 	/**
 	 * 사진게시물 정보 수정

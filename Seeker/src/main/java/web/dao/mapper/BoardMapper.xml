@@ -197,7 +197,7 @@
 				, stored_name storedName
 			
 		from boardFile
-		where boardno = #{boardno}
+		where boardo = #{boardno}
 	
 	</select>
 	

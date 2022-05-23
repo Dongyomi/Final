@@ -104,7 +104,11 @@ $(document).ready(function() {
 	<div id="filebox">
 
 		<div id="originFile">
-		<a href="/board/freeDownload?fileNo=${boardFile.fileNo }">${boardFile.originName }</a>
+		
+		<c:forEach items="${boardFile }" var="r"> 
+		<a href="/board/freeDownload?fileNo=${r.fileNo }">${r.originName }</a>
+		</c:forEach>
+		
 		<span id="deleteFile">삭제</span>
 		
 		</div>

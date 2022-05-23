@@ -187,9 +187,8 @@ function deleteReply(replyno) {
 
 <!-- 첨부파일 다운로드 -->
 <c:forEach var="item" items="${boardFile }">
-	<a href="/board/photoDownload?fileNo=${item.fileNo }" download=" ${item.originName }">${item.originName } </a>
+   <a href="<%=request.getContextPath() %>/upload/${item.storedName }" download="${item.originName }">${item.originName }</a><br>
 </c:forEach>
-
 
 <div class="text-center">
 	<button id="btnList" class="btn btn-default">목록</button>
