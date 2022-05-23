@@ -82,7 +82,8 @@ $(document).ready(function() {
 
 <form action="/board/photoUpdate" method="post" enctype="multipart/form-data">
 <%-- <input type="hidden" name="boardno" value="${updateFreeBoard.boardno }"> --%>
-<input type="hidden" name="boardno" value="${param.boardno }">
+
+<input type="hidden" name="boardno" value="${updatePhotoBoard.boardno }">
 <!-- <form action="/board/freeWrite" method="post"> -->
 <div class="form-group">
 	<label for="write">작성자</label>

@@ -485,5 +485,14 @@ public class BoardServiceImpl implements BoardService{
 		return boardDao.selectPhotoBoardFile(viewBoard);
 	}
 
+	@Override
+	public void insertPhotoReply(Reply photoReply) {
+		replyDao.insertPhotoReply(photoReply);
+		
+	}
 
+	@Override
+	public List<Reply> getReplyphotoList(Board board) {
+		return replyDao.selectPhotoReply(board);
+	}
 }

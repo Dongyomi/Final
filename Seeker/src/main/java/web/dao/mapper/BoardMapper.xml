@@ -197,7 +197,7 @@
 				, stored_name storedName
 			
 		from boardFile
-		where boardno = #{boardNo}
+		where boardno = #{boardno}
 	
 	</select>
 	
@@ -240,29 +240,32 @@
 	<select id="fileSelectCntAll" resultType="int">
 	
 		select count(*) from boardfile
+        where rowid in(select max(rowid) from boardfile group by boardno)
 	
 	</select>
 	
 	<select id="getFilePhotoList" parameterType="web.util.Paging_board" resultType="web.dto.BoardFile">
 	 
 	select * from (
-		select rownum rnum, B.* FROM (
-				select
-				fileno fileNo
-				, b.boardno boardNo
-				, origin_name originName
-				, stored_name storedName
-				, b.btitle btitle
-			from boardfile f 
+      select rownum rnum, B.* FROM (
+            select
+            fileno fileNo
+            , b.boardno boardNo
+            , origin_name originName
+            , stored_name storedName
+            , b.btitle btitle
+         from (
+            select * from boardfile
+            where rowid in(select max(rowid) from boardfile group by boardno)
+            ) f 
             inner join board b
-			on f.boardno = b.boardno
+         on f.boardno = b.boardno
             where b.cateno = 2
-			order by f.boardno DESC
-		) B
-	) BOARD
-	
-	where rnum between #{startNo } and #{endNo }
-	
+         order by f.boardno DESC
+      ) B
+   ) BOARD
+   
+   where rnum between #{startNo } and #{endNo }
 		
 	</select>
 	

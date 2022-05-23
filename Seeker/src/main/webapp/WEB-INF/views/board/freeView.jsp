@@ -205,10 +205,9 @@ function deleteReply(replyno) {
 	<c:forEach items="${replyList }" var="reply">
 	<tr data-replyno="${reply.replyno }">
 		
-		<td style="width: 10%;">${viewBoard.nick }</td>
+		<td style="width: 10%;">${reply.nick }</td>
 		<td style="width: 40%;">${reply.content }</td>
 		<td style="width: 10%;"><fmt:formatDate value="${viewBoard.bdate }" pattern="yyyy-MM-dd "/></td>
-<%-- 		<c:out value="${20*replyList.redepth}"/>	<!-- 대댓글 --> --%>
 		<td style="width: 5%;"><button class="btn btn-default btn-xs">댓글</button></td>
 		<td style="width: 5%;">
 			<c:if test="${sessionScope.id eq reply.id }">

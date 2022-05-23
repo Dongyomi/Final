@@ -2,6 +2,7 @@
 package web.controller;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -104,6 +105,7 @@ public class BoardController {
 		List<Reply> replyList = boardService.getReplyList(viewBoard);
 		model.addAttribute("replyList" , replyList);
 		
+		logger.info("리플아이디확인{} " , replyList);
 		
 		return "board/freeView";
 	}
@@ -197,26 +199,26 @@ public class BoardController {
 	@RequestMapping(value="/photoList")
 	public void pList (Paging_board photoParam , Model model) {
 		
-		logger.info(" board/photoList [get]");
-		
-		//페이징계산
-		Paging_board photoPaging = boardService.getPaging(photoParam);
-		
-		//게시글 목록 조회
-		List<Board> photoList = boardService.photoList(photoPaging);
+		   logger.info(" board/photoList [get]");
+		      
+		      //페이징계산
+		      Paging_board photoPaging = boardService.getPaging(photoParam);
+		      System.out.println("dfdasfsdfasdfohasfghoashugasgh총페이지"+ photoPaging.getTotalCount());
+		      //게시글 목록 조회
+		      List<Board> photoList = boardService.photoList(photoPaging);
 
-		
-		Paging_board filePaging = boardService.getPhotoFile(photoParam);
-		List<BoardFile> fileList = boardService.getFilePhotoList(filePaging);
-		
-		model.addAttribute("paging" , photoPaging);
-		model.addAttribute("list" , photoList);
-		model.addAttribute("fileList" , fileList);
-		
-		
-		
-		logger.info("포토리스트{}" , photoList);
-		logger.info("파일리스트{}" , fileList);
+		      
+		      Paging_board filePaging = boardService.getPhotoFile(photoParam);
+		      List<BoardFile> fileList = boardService.getFilePhotoList(filePaging);
+		      
+		      model.addAttribute("paging" , filePaging);
+		      model.addAttribute("list" , photoList);
+		      model.addAttribute("fileList" , fileList);
+		      
+		      
+		      
+		      logger.info("포토리스트{}" , photoList);
+		      logger.info("파일리스트{}" , fileList);
 	}
 	 
 	
@@ -259,8 +261,10 @@ public class BoardController {
 	
 		//댓글 리스트 전달
 		Reply reply = new Reply();
-		List<Reply> replyList = boardService.getReplyList(viewBoard);
-		model.addAttribute("replyList" , replyList);
+		List<Reply> replyphotoList = boardService.getReplyphotoList(viewBoard);
+		model.addAttribute("replyphotoList" , replyphotoList);
+		
+		logger.info("리플아이디 전달 {} " , replyphotoList);
 		
 		
 		
@@ -317,6 +321,8 @@ public class BoardController {
 			return "redirect:/board/photoList";
 		}
 
+		logger.info("보드넘버가져오기!!!!!! {}" , board);
+		
 		//수정할 게시글의 상세보기
 		board = boardService.photoView(board);
 		model.addAttribute("updatePhotoBoard" , board);
@@ -324,6 +330,7 @@ public class BoardController {
 		//첨부파일 정보 모델값 전달
 		BoardFile boardFile = boardService.getPhotoAttachFile(board);
 		model.addAttribute("boardFile" , boardFile);
+		
 		
 		
 		return "board/photoUpdate";

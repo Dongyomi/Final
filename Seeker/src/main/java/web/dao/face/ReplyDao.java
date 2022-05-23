@@ -45,4 +45,21 @@ public interface ReplyDao {
 	 */
 	public int countReply(Reply reply);
 
+	/**
+	 * 
+	 * 사진 리플 넣기
+	 * @param reply
+	 */
+	public void insertPhotoReply(Reply photoReply);
+	/**
+	 * 사진 리플 목록 조회
+	 * 
+	 * @param board
+	 * @return
+	 */
+
+	public List<Reply> selectPhotoReply(Board board);
+
+
+
 }
